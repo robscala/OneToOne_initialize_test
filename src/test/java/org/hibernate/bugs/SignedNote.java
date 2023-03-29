@@ -1,4 +1,4 @@
-package org.example;
+package org.hibernate.bugs;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,5 +29,15 @@ public class SignedNote
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_ID", foreignKey = @ForeignKey())
     private Person person;
+
+    public SignedNote()
+    {
+    }
+
+    public SignedNote(String note, Person person)
+    {
+        this.note = note;
+        this.person = person;
+    }
 }
 

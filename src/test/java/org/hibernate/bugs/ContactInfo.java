@@ -1,4 +1,4 @@
-package org.example;
+package org.hibernate.bugs;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

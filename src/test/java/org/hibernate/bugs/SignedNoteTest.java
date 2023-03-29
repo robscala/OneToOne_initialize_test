@@ -1,4 +1,4 @@
-package org.example;
+package org.hibernate.bugs;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -15,7 +15,18 @@ public class SignedNoteTest
 
     @Before
     public void init() {
-        entityManagerFactory = Persistence.createEntityManagerFactory( "refresh_test" );
+        entityManagerFactory = Persistence.createEntityManagerFactory( "templatePU" );
+
+        // Populate records in the database:
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        System.out.println("Creating database records");
+        Person person = new Person("Henry");
+        SignedNote signedNote = new SignedNote("a note", person);
+        entityManager.getTransaction().begin();
+        entityManager.persist(person);
+        entityManager.persist(signedNote);
+        entityManager.getTransaction().commit();
+        entityManager.close();
     }
 
     @After
@@ -28,10 +39,14 @@ public class SignedNoteTest
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         Object originalCount = entityManager.createNativeQuery("select count(*) from contact_info").getSingleResult();
-        SignedNote signedNote = entityManager.find(SignedNote.class, 365138);
+        SignedNote signedNote = entityManager.find(SignedNote.class, 1L);
         entityManager.getTransaction().begin();
+//        Person newPerson = new Person();
+//        newPerson.setFirstName("me");
+//        entityManager.persist(newPerson);
         entityManager.getTransaction().commit();
         Object finalCount = entityManager.createNativeQuery("select count(*) from contact_info").getSingleResult();
+        System.out.println("Original count: " + originalCount + "  Final count: " + finalCount);
         assertEquals("Same number of contact_info records", originalCount, finalCount);
         entityManager.close();
     }

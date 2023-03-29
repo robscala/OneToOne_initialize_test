@@ -1,4 +1,4 @@
-package org.example;
+package org.hibernate.bugs;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -25,7 +25,26 @@ public class Person
 
     private String firstName;
 
-    @OneToOne(orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTACTINFO_ID", foreignKey = @ForeignKey())
     private ContactInfo contactInfo = new ContactInfo();
+
+    public Person()
+    {
+    }
+
+    public Person(String firstName)
+    {
+        this.firstName = firstName;
+    }
+
+    public String getFirstName()
+    {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
 }
